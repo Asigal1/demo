@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<script>
+    var watchID;
+    var geo_text = "\n";
+    function test(){
+    watchID = navigator.geolocation.watchPosition(function(position) {
+      var timestamp = position.timestamp;
+      var date = new Date(timestamp);
+      geo_text += 'Date: ' + (date.getDate() + 1) + '/' + (date.getMonth() + 1) + '/' +
+          (date.getFullYear() + 31) + ' ' + date.getHours() + '時' + date.getMinutes() + '分' +
+          date.getSeconds() + '秒';
+      geo_text += position.timestamp + "\n";
+      geo_text += position.coords.latitude + ",";
+      geo_text += position.coords.longitude + "\n";
+      console.log("geodata:" + geo_text + "\n");
+    });
+    // sleep関数 waitTime:停止する時間(ミリ秒)
+  const sleep = waitTime => new Promise( resolve => setTimeout(resolve, 1000) );
+
+    }
+    
+    function clearWatchPosition() {
+        navigator.geolocation.clearWatch(watchID);
+        alert("position to Finish!\n")
+      }
+    
+    function geodata_output(){
+        const blob = new Blob([geo_text], { type: 'text/plain' });
+        // ダウンロード用のaタグ生成
+        const a = document.createElement('a');
+        a.href =  URL.createObjectURL(blob);
+        a.download = 'sample.txt';
+        a.click();
+    }
+    
+/*
+    geo_text += "取得時刻:" + date.toLocaleString() + "\n";
+
+    alert(geo_text);
+    
+    const blob = new Blob([geo_text], { type: 'text/plain' });
+    // ダウンロード用のaタグ生成
+    const a = document.createElement('a');
+    a.href =  URL.createObjectURL(blob);
+    a.download = 'sample.txt';
+    a.click();
+
+}
+ */
+    
+</script>
+</head>
+<body>
+
+<button onclick="test()">test</button>
+<input type="button" value="定期的な位置情報の取得を停止"
+       onclick="clearWatchPosition()" />
+<input type="button" value="定期的な位置情報の出力"
+          onclick="geodata_output()" />
+
+</body>
+</html>
+
